@@ -49,7 +49,7 @@ abstract class AbstractKernel
      * @return KernelInterface
      * @throws \Exception
      */
-    protected function load(ServerRequestInterface $request, ?DispatchConfigInterface $config = null): Kernel
+    protected function load(ServerRequestInterface $request, ?DispatchConfigInterface $config = null): KernelInterface
     {
         App::boot(new Dir($this->dir), new Path([]));
         return new Kernel($this->container, $this->middlewares, $config);

@@ -22,7 +22,7 @@ final class App
      * This is a single to set App globals
      *
      * @param Dir $dir
-     * @param PathInterface $request
+     * @param PathInterface $path
      * @return self
      */
     public static function boot(Dir $dir, PathInterface $path): self

@@ -253,69 +253,20 @@ class RouterDispatcher implements RouterInterface
     /**
      * Dispatch results
      * @param callable $call
-     * @return ResponseInterface
-     * @throws \Exception
-     * @throws \ReflectionException
+     * @return bool
      */
     public function dispatch(callable $call): bool
     {
         $dispatcher = $this->registerDispatcher();
         $routeInfo = $dispatcher->dispatch($this->method, $this->dispatchPath);
-
-        //print_r($routeInfo);
-        if ($routeInfo[0] === Dispatcher::FOUND) {
-            //die("OK");
-            $call($routeInfo, $this->response, $this->request);
-        }
-
-
-        //die("BOO");
-
+        $call($routeInfo, $this->response, $this->request);
 
 
         return true;
-
         /*
-         if ($routeInfo[0] === Dispatcher::FOUND) {
-
-
-            if (is_array($routeInfo[1]['controller'])) {
-
-                $select = (isset($routeInfo[1]['controller'])) ? $routeInfo[1]['controller'] : $routeInfo[1];
-                if (!class_exists($select[0])) {
-                    throw new \Exception("You have specified a controller ($select[0]) that do not exists in you router file!", 1);
-                }
-                $reflect = new Reflection($select[0]);
-                $controller = $reflect->dependencyInjector();
-                if (isset($select[1])) {
-                    // Add Dependency Injector on the class method.
-                    $response = $reflect->dependencyInjector($controller, $select[1]);
-                } else {
-                    if (is_callable($controller)) {
-                        $response = $controller($this->response, $this->request);
-                    }
-                }
-
-                if ($response instanceof ResponseInterface) {
-                    $this->response = $response;
-                }
-
-            } else {
-                $response = $routeInfo[1]['controller']($this->response, $this->request);
-            }
-
-        } else {
-            $response = $call($routeInfo[0], $this->response, $this->request, null);
-        }
-
-        if ($response instanceof ResponseInterface) {
-            $this->response = $response;
-        }
-
         if (is_array($response)) {
             $this->response = $this->jsonResponse($response);
         }
-        return $this->response;
          */
     }
 
