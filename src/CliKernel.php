@@ -28,14 +28,13 @@ final class CliKernel extends AbstractKernel
         LocalMiddleware::class,
         CliInitMiddleware::class
     ];
-    protected Stream $stream;
+
 
     public function __construct(string $dir)
     {
         parent::__construct($dir);
         // Default config
         Kernel::setRouterFilePath($dir . "/routers/console.php");
-
         $this->stream = new Stream(Stream::STDERR);
     }
 

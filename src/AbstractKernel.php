@@ -6,6 +6,7 @@ use MaplePHP\Core\Configs\LoadConfigFiles;
 use MaplePHP\Core\Support\Request;
 use MaplePHP\Emitron\Contracts\KernelInterface;
 use MaplePHP\Http\Path;
+use MaplePHP\Http\Stream;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use MaplePHP\Blunder\Interfaces\AbstractHandlerInterface;
@@ -19,6 +20,7 @@ use MaplePHP\Http\Env;
 abstract class AbstractKernel
 {
 
+    protected Stream $stream;
     protected array $middlewares;
     protected Env $env;
     protected ContainerInterface $container;

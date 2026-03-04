@@ -13,28 +13,23 @@ use MaplePHP\Emitron\Kernel;
 use MaplePHP\Emitron\Middlewares\{
     ContentLengthMiddleware,
     GzipMiddleware,
-    HeadRequestMiddleware,
-    OutputMiddleware
+    HeadRequestMiddleware
 };
 use Psr\Http\Message\ServerRequestInterface;
 
 final class HttpKernel extends AbstractKernel
 {
-    private Stream $stream;
+    protected array $middlewares = [
+        ContentLengthMiddleware::class,
+        GzipMiddleware::class,
+        HeadRequestMiddleware::class
+    ];
 
     public function __construct(string $dir)
     {
         parent::__construct($dir);
         Kernel::setRouterFilePath($dir . "/routers/web.php");
-
         $this->stream = new Stream(Stream::TEMP);
-        // It will reverse the order
-        $this->middlewares = [
-            new ContentLengthMiddleware(),
-            new GzipMiddleware(),
-            new OutputMiddleware($this->stream),
-            new HeadRequestMiddleware(),
-        ];
     }
 
     /**
