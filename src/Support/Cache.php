@@ -1,7 +1,8 @@
 <?php
 
-namespace MaplePHP\Core\Support;
+declare(strict_types=1);
 
+namespace MaplePHP\Core\Support;
 
 use MaplePHP\Core\App;
 use MaplePHP\Cache\Cache as MapleCache;
@@ -9,7 +10,6 @@ use Psr\Cache\CacheItemPoolInterface;
 
 class Cache
 {
-
     const CACHE_DIR = "/storage/cache/framework";
 
     /**

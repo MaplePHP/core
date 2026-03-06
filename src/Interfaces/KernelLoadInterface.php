@@ -1,9 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MaplePHP\Core\Interfaces;
 
-use MaplePHP\Core\AbstractKernel;
-use MaplePHP\Core\HttpKernelLoad;
 use MaplePHP\Emitron\Contracts\KernelInterface;
 
 interface KernelLoadInterface

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MaplePHP\Core;
 
 use MaplePHP\Blunder\Handlers\HtmlHandler;
@@ -64,7 +66,6 @@ final class HttpKernel extends AbstractKernel implements KernelLoadInterface
 		$config = $this->dispatch($request);
 		$kernel = $this->load($request, $config);
 		$kernel->run($request, $this->stream);
-
 		return $kernel;
 	}
 

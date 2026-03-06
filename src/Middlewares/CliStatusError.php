@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MaplePHP\Core\Middlewares;
 
 use MaplePHP\Core\Exceptions\HttpException;
@@ -32,7 +34,6 @@ class CliStatusError implements MiddlewareInterface
 					$request->getAttributes()
 				);
 			}
-
 		} catch (HttpException $ex) {
 			/** @var \MaplePHP\Prompts\Command $command */
 			$command = $this->container->get("command");

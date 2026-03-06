@@ -1,39 +1,40 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MaplePHP\Core;
 
-
 use MaplePHP\Core\Support\Dir;
-use MaplePHP\Http\Interfaces\PathInterface;
+use MaplePHP\Core\Enums\Environment;
+use MaplePHP\Emitron\Contracts\AppInterface;
 
-final class App
+final class App implements AppInterface
 {
-
     private static ?self $inst = null;
     private Dir $dir;
-    private PathInterface $path;
     private string $coreDir;
+	private array $config;
 
-    private function __construct(Dir $dir, PathInterface $path) {
+	private function __construct(Dir $dir, array $config = []) {
         $this->dir = $dir;
-        $this->path = $path;
         $this->coreDir = __DIR__;
+		$this->config = $config;
     }
 
-    /**
-     * This is a single to set App globals
-     *
-     * @param Dir $dir
-     * @param PathInterface $path
-     * @return self
-     */
-    public static function boot(Dir $dir, PathInterface $path): self
+	/**
+	 * This is a single to set App globals
+	 *
+	 * @param Dir $dir
+	 * @param array $config
+	 * @return self
+	 */
+    public static function boot(Dir $dir, array $config = []): self
     {
         if (self::$inst !== null) {
             throw new \RuntimeException('App already initialized.');
         }
 
-        return self::$inst = new self($dir, $path);
+        return self::$inst = new self($dir, $config);
     }
 
     /**
@@ -50,6 +51,61 @@ final class App
         return self::$inst;
     }
 
+	/**
+	 * Check if the environment is in prod
+	 *
+	 * @return bool
+	 */
+	public function isProd(): bool
+	{
+		return $this->config['env'] === Environment::PROD->name();
+	}
+
+	/**
+	 * Check if the environment is in stage
+	 *
+	 * @return bool
+	 */
+	public function isStage(): bool
+	{
+		return $this->config['env'] === Environment::STAGE->name();
+	}
+
+	/**
+	 * Check if the environment is in test
+	 *
+	 * @return bool
+	 */
+	public function isTest(): bool
+	{
+		return $this->config['env'] === Environment::TEST->name();
+	}
+
+	/**
+	 * Check if the environment is in dev
+	 *
+	 * @return bool
+	 */
+	public function isDev(): bool
+	{
+		return $this->config['env'] === Environment::DEV->name();
+	}
+
+	/**
+	 * Get current Environment
+	 *
+	 * @return string
+	 */
+	public function env(): string
+	{
+		return $this->config['env'] ?? Environment::PROD->name();
+	}
+
+	/**
+	 * Get core/boot dir where code app boot originate
+	 *
+	 * @return string
+	 */
     public function coreDir(): string
     {
         return $this->coreDir;
@@ -63,15 +119,5 @@ final class App
     public function dir(): Dir
     {
         return $this->dir;
-    }
-
-    /**
-     * Get the app core Request instance
-     *
-     * @return PathInterface
-     */
-    public function path(): PathInterface
-    {
-        return $this->path;
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MaplePHP\Core\Render\Errors;
 
 use MaplePHP\Core\App;

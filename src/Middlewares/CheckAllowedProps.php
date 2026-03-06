@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MaplePHP\Core\Middlewares;
 
 use MaplePHP\Emitron\Contracts\ConfigPropsInterface;

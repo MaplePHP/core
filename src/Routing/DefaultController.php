@@ -1,15 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MaplePHP\Core\Routing;
 
 use MaplePHP\Emitron\Contracts\ConfigPropsInterface;
 use MaplePHP\Prompts\Command;
-use MaplePHP\Validate\Validator;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 abstract class DefaultController

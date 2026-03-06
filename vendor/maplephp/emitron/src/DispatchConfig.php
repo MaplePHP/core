@@ -26,16 +26,19 @@ class DispatchConfig implements DispatchConfigInterface
     private string $dir;
     private ?RouterInterface $router = null;
     protected ConfigPropsInterface $props;
+	private ?string $configPropClass;
 
     /**
      * @param string|ConfigPropsInterface|null $props
      * @throws Exception
      */
-    public function __construct(string|null|ConfigPropsInterface $props = null)
+    public function __construct(string|null|ConfigPropsInterface $props = null, ?string $configPropClass = null)
     {
         if (!($props instanceof ConfigPropsInterface)) {
             $this->loadConfigFile(($props === null) ? __DIR__ . '/../emitron.config' : $props);
         }
+		
+		$this->configPropClass = $configPropClass;
     }
 
     /**

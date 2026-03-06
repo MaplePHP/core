@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace MaplePHP\Core;
 
 use Exception;
@@ -23,12 +26,12 @@ use MaplePHP\Unitary\Console\Middlewares\{AddCommandMiddleware,
 final class CliKernel extends AbstractKernel
 {
     protected array $middlewares = [
-	    CliStatusError::class,
         AddCommandMiddleware::class,
         ConfigPropsMiddleware::class,
         CheckAllowedProps::class,
         LocalMiddleware::class,
-        CliInitMiddleware::class
+        CliInitMiddleware::class,
+	    CliStatusError::class,
     ];
 
 

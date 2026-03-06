@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MaplePHP\Core;
 
 use MaplePHP\Core\Configs\LoadConfigFiles;
 use MaplePHP\Emitron\Contracts\KernelInterface;
-use MaplePHP\Http\Path;
 use MaplePHP\Http\Stream;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -24,6 +25,7 @@ abstract class AbstractKernel
     protected Env $env;
     protected ContainerInterface $container;
 	protected string $dir;
+	protected array $config;
 
     public function __construct(string $dir)
     {
@@ -32,14 +34,16 @@ abstract class AbstractKernel
         }
 
         $this->dir = realpath($dir);
-
         $config = (new LoadConfigFiles())
             ->add("dir", $this->dir)
             ->loadEnvFile($this->dir . "/.env")
             ->loadFile($this->dir . "/configs/configs.php");
 
+		$this->config = $config->fetch();
+		$app = App::boot(new Dir($this->dir), $this->config);
         $this->container = new Container();
-        $this->container->set("config", $config->fetch());
+        $this->container->set("config", $this->config);
+	    $this->container->set("app", $app);
     }
 
     /**
@@ -52,7 +56,6 @@ abstract class AbstractKernel
      */
     protected function load(ServerRequestInterface $request, ?DispatchConfigInterface $config = null): KernelInterface
     {
-        App::boot(new Dir($this->dir), new Path([]));
         return new Kernel($this->container, $this->middlewares, $config);
     }
 
