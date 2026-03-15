@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MaplePHP\Core;
 
 use MaplePHP\Core\Configs\LoadConfigFiles;
+use MaplePHP\Core\Support\ServiceProvider;
 use MaplePHP\Emitron\Contracts\KernelInterface;
 use MaplePHP\Http\Stream;
 use Psr\Container\ContainerInterface;
@@ -37,9 +38,10 @@ abstract class AbstractKernel
         $config = (new LoadConfigFiles())
             ->add("dir", $this->dir)
             ->loadEnvFile($this->dir . "/.env")
-            ->loadFile($this->dir . "/configs/configs.php");
+            ->loadFiles($this->dir . "/configs/");
 
 		$this->config = $config->fetch();
+		
 		$app = App::boot(new Dir($this->dir), $this->config);
         $this->container = new Container();
         $this->container->set("config", $this->config);
@@ -56,8 +58,39 @@ abstract class AbstractKernel
      */
     protected function load(ServerRequestInterface $request, ?DispatchConfigInterface $config = null): KernelInterface
     {
+
+	    $this->bootServiceProviders();
         return new Kernel($this->container, $this->middlewares, $config);
     }
+
+	/**
+	 * Boot servcice providers
+	 *
+	 * @return void
+	 */
+	protected function bootServiceProviders()
+	{
+		if(isset($this->config['providers'])) {
+			$providers = [];
+
+			// We want to register first, that way the providers could talk to eachother
+			// through the container or event listners if you want.
+			foreach ($this->config['providers'] as $providerClass) {
+				$provider = new $providerClass();
+				if(!($provider instanceof ServiceProvider)) {
+					throw new \RuntimeException(
+						"$providerClass is not an instance of " . ServiceProvider::class . "!"
+					);
+				}
+				$provider->register($this->container);
+				$providers[] = $provider;
+			}
+
+			foreach ($providers as $provider) {
+				$provider->boot();
+			}
+		}
+	}
 
 	/**
 	 * @param Stream $stream
