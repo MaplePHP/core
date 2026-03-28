@@ -20,7 +20,8 @@ final class App implements AppInterface
         $this->dir = $dir;
         $this->coreDir = __DIR__;
 		$this->config = $config;
-		$this->app = $this->config['configs'] ?? [];
+		// Renamed configs to app
+		$this->app = $this->config['app'] ?? ($this->config['configs'] ?? []);
     }
 
 	/**

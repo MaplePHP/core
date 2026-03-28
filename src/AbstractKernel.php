@@ -47,8 +47,12 @@ abstract class AbstractKernel
 		$this->container = new Container();
 		$this->container->set("app", $app);
 
-		Clock::setDefaultLocale(App::get()->getApp('locale'));
-		Clock::setDefaultTimezone($this->config['configs']['timezone']);
+		if(App::get()->getApp('locale') !== null) {
+			Clock::setDefaultLocale(App::get()->getApp('locale'));
+		}
+		if(App::get()->getApp('timezone') !== null) {
+			Clock::setDefaultTimezone(App::get()->getApp('timezone'));
+		}
 	}
 
 	/**
